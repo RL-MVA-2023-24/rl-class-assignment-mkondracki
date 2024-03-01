@@ -55,7 +55,6 @@ class DQN(nn.Module):
         self.layer5 = nn.Linear(256, 256)
         self.layer6 = nn.Linear(256, n_actions)
 
-
     def forward(self, x):
         x = F.relu(self.layer1(x))
         x = F.relu(self.layer2(x))
@@ -70,7 +69,7 @@ class DQN(nn.Module):
 class ProjectAgent:
     # act greedy
     def act(self, observation, use_random=False):
-        device = "cuda" if next(self.policy.parameters()).is_cuda else "cpu"
+        device = torch.device('cpu')
         with torch.no_grad():
             state = torch.Tensor(observation).unsqueeze(0).to(device)
             gr_action = self.policy(state).max(1).indices.view(1, 1)
@@ -88,16 +87,14 @@ class ProjectAgent:
             self.policy = DQN(env.observation_space.shape[0], n_actions=env.action_space.n)
             self.policy.load_state_dict(torch.load(self.path, map_location=device))
             self.policy.eval()
-            print("loaded")
+            #print("loaded")
             return
         else:
             print("Model file does not exist.")
             return
     
 
-
     def train(self):
-
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         lr = 0.000001
