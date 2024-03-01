@@ -10,8 +10,6 @@ from copy import deepcopy
 import numpy as np
 import os
 
-from tqdm import tqdm
-
 from evaluate import evaluate_HIV, evaluate_HIV_population
     
 from itertools import count
